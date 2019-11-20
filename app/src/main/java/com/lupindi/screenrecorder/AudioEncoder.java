@@ -19,8 +19,8 @@ package com.lupindi.screenrecorder;
 import android.media.MediaFormat;
 
 /**
- * @author yrom
- * @version 2017/12/3
+ * @author zhangzhuo
+ * @version 2019/11/3
  */
 class AudioEncoder extends BaseEncoder {
     private final AudioEncodeConfig mConfig;

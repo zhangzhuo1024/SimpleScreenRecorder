@@ -19,8 +19,8 @@ package com.lupindi.screenrecorder;
 import java.io.IOException;
 
 /**
- * @author yrom
- * @version 2017/12/4
+ * @author zhangzhuo
+ * @version 2019/11/4
  */
 interface Encoder {
     void prepare() throws IOException;

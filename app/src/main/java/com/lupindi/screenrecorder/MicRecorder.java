@@ -43,8 +43,8 @@ import static android.media.MediaCodec.INFO_OUTPUT_FORMAT_CHANGED;
 import static android.os.Build.VERSION_CODES.N;
 
 /**
- * @author yrom
- * @version 2017/12/4
+ * @author zhangzhuo
+ * @version 2019/11/4
  */
 class MicRecorder implements Encoder {
     private static final String TAG = "MicRecorder";

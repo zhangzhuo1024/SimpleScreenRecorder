@@ -32,8 +32,8 @@ import static android.os.Build.VERSION_CODES.O;
 import static com.lupindi.screenrecorder.MainActivity.ACTION_STOP;
 
 /**
- * @author yrom
- * @version 2017/12/1
+ * @author zhangzhuo
+ * @version 2019/11/1
  */
 class Notifications extends ContextWrapper {
     private static final int id = 0x1fff;

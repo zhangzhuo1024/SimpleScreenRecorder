@@ -36,7 +36,7 @@ import static android.media.MediaFormat.MIMETYPE_AUDIO_AAC;
 import static android.media.MediaFormat.MIMETYPE_VIDEO_AVC;
 
 /**
- * @author Yrom
+ * @author zhangzhuo
  */
 public class ScreenRecorder {
     private static final String TAG = "ScreenRecorder";

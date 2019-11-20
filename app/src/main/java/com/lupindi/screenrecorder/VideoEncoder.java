@@ -24,8 +24,8 @@ import android.view.Surface;
 import java.util.Objects;
 
 /**
- * @author yrom
- * @version 2017/12/3
+ * @author zhangzhuo
+ * @version 2019/11/3
  */
 class VideoEncoder extends BaseEncoder {
     private static final boolean VERBOSE = false;

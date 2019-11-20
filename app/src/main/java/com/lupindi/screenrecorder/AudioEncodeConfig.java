@@ -21,8 +21,8 @@ import android.media.MediaFormat;
 import java.util.Objects;
 
 /**
- * @author yrom
- * @version 2017/12/3
+ * @author zhangzhuo
+ * @version 2019/11/3
  */
 public class AudioEncodeConfig {
     final String codecName;

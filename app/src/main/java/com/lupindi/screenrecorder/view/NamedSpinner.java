@@ -31,8 +31,8 @@ import android.widget.TextView;
 import com.lupindi.screenrecorder.R;
 
 /**
- * @author yrom
- * @version 2017/12/2
+ * @author zhangzhuo
+ * @version 2019/11/20
  */
 public class NamedSpinner extends LinearLayout {
     private TextView mTitleView;

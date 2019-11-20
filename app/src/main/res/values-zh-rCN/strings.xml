@@ -18,8 +18,8 @@
     <string name="without_audio">Without Audio</string>
     <string name="with_audio">With Audio</string>
     <string name="start_recorder">Start Recorder</string>
-    <string name="stop_recorder">Stop Recorder</string>
-    <string name="restart_recorder">Restart recorder</string>
+    <string name="stop_recorder">停止</string>
+    <string name="restart_recorder">开始</string>
     <string name="no_permission">No Permission!</string>
     <string name="no_permission_to_write_sd_ard">No permission to write sd card</string>
     <string name="permission_denied_screen_recorder_cancel">Permission denied! Screen recorder is cancel</string>

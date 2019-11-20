@@ -50,7 +50,9 @@ import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.lupindi.screenrecorder.view.CircleWaveButton;
 import com.lupindi.screenrecorder.view.NamedSpinner;
+import com.lupindi.screenrecorder.view.WaveView;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -71,7 +73,7 @@ public class MainActivity extends Activity {
     private static final int REQUEST_PERMISSIONS = 2;
     // members below will be initialized in onCreate()
     private MediaProjectionManager mMediaProjectionManager;
-    private Button mButton;
+    private CircleWaveButton mButton;
     private ToggleButton mAudioToggle;
     private NamedSpinner mVieoResolution;
     private NamedSpinner mVideoFramerate;
@@ -325,7 +327,12 @@ public class MainActivity extends Activity {
     }
 
     private void bindViews() {
+
+        WaveView viewById = findViewById(R.id.wave_view);
+        viewById.start();
+
         mButton = findViewById(R.id.record_button);
+        mButton.start();
         mButton.setOnClickListener(this::onButtonClick);
 
         mVideoCodec = findViewById(R.id.video_codec);
