@@ -45,7 +45,6 @@ import android.util.Log;
 import android.util.Range;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -107,7 +106,6 @@ public class MainActivity extends Activity {
         mMediaProjectionManager = (MediaProjectionManager) getApplicationContext().getSystemService(MEDIA_PROJECTION_SERVICE);
         mNotifications = new Notifications(getApplicationContext());
         bindViews();
-
         Utils.findEncodersByTypeAsync(VIDEO_AVC, infos -> {
             logCodecInfos(infos, VIDEO_AVC);
             mAvcCodecInfos = infos;

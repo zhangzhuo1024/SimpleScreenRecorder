@@ -2,173 +2,216 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_color"
->
+    android:background="@drawable/background_color">
 
-    <ScrollView
-
+    <RelativeLayout
+        android:id="@+id/action_bar"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="80dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/media_format_chooser"
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerVertical="true"
+            android:background="@color/colorPrimary" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_centerInParent="true"
+            android:text="@string/app_name"
+            android:textSize="30sp" />
 
-            <TextView
-                style="?android:attr/titleTextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/video_encode_config_h_264_avc" />
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@color/colorAccent" />
+    </RelativeLayout>
 
-            <com.lupindi.screenrecorder.view.NamedSpinner
-                android:id="@+id/video_codec"
-                android:name="@string/video_encoder"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/navigation"
+        android:layout_below="@id/action_bar"
+        android:orientation="vertical">
 
-            <com.lupindi.screenrecorder.view.NamedSpinner
-                android:id="@+id/resolution"
-                android:name="@string/resolution"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:entries="@array/video_resolutions" />
+        <ScrollView
 
-            <com.lupindi.screenrecorder.view.NamedSpinner
-                android:id="@+id/video_bitrate"
-                android:name="@string/bitrate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:entries="@array/video_bitrates" />
-
-            <com.lupindi.screenrecorder.view.NamedSpinner
-                android:id="@+id/framerate"
-                android:name="@string/frame_rate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:layout_marginTop="8dp"
-                android:entries="@array/video_framerates" />
-
-            <com.lupindi.screenrecorder.view.NamedSpinner
-                android:id="@+id/iframe_interval"
-                android:name="@string/frame_interval"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:layout_marginTop="8dp"
-                android:entries="@array/iframeintervals" />
-
-            <com.lupindi.screenrecorder.view.NamedSpinner
-                android:id="@+id/avc_profile"
-                android:name="@string/avc_profle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp" />
-
-            <com.lupindi.screenrecorder.view.NamedSpinner
-                android:id="@+id/orientation"
-                android:name="@string/orientation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:entries="@array/orientations" />
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
 
             <LinearLayout
-                android:id="@+id/audio_format_chooser"
+                android:id="@+id/media_format_chooser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:orientation="vertical">
 
                 <TextView
                     style="?android:attr/titleTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/audio_encode_config_h_264_aac" />
+                    android:text="@string/video_encode_config_h_264_avc" />
 
                 <com.lupindi.screenrecorder.view.NamedSpinner
-                    android:id="@+id/audio_codec"
-                    android:name="@string/audio_encoder"
+                    android:id="@+id/video_codec"
+                    android:name="@string/video_encoder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp" />
 
                 <com.lupindi.screenrecorder.view.NamedSpinner
-                    android:id="@+id/audio_channel_count"
-                    android:name="@string/channels"
+                    android:id="@+id/resolution"
+                    android:name="@string/resolution"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:entries="@array/audio_channels" />
+                    android:entries="@array/video_resolutions" />
 
                 <com.lupindi.screenrecorder.view.NamedSpinner
-                    android:id="@+id/sample_rate"
-                    android:name="@string/sample_rate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp" />
-
-                <com.lupindi.screenrecorder.view.NamedSpinner
-                    android:id="@+id/audio_bitrate"
+                    android:id="@+id/video_bitrate"
                     android:name="@string/bitrate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginTop="8dp"
+                    android:entries="@array/video_bitrates" />
 
                 <com.lupindi.screenrecorder.view.NamedSpinner
-                    android:id="@+id/aac_profile"
-                    android:name="@string/aac_profile"
+                    android:id="@+id/framerate"
+                    android:name="@string/frame_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="8dp"
+                    android:entries="@array/video_framerates" />
+
+                <com.lupindi.screenrecorder.view.NamedSpinner
+                    android:id="@+id/iframe_interval"
+                    android:name="@string/frame_interval"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="8dp"
+                    android:entries="@array/iframeintervals" />
+
+                <com.lupindi.screenrecorder.view.NamedSpinner
+                    android:id="@+id/avc_profile"
+                    android:name="@string/avc_profle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp" />
+
+                <com.lupindi.screenrecorder.view.NamedSpinner
+                    android:id="@+id/orientation"
+                    android:name="@string/orientation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:entries="@array/orientations" />
+
+                <LinearLayout
+                    android:id="@+id/audio_format_chooser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="?android:attr/titleTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/audio_encode_config_h_264_aac" />
+
+                    <com.lupindi.screenrecorder.view.NamedSpinner
+                        android:id="@+id/audio_codec"
+                        android:name="@string/audio_encoder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp" />
+
+                    <com.lupindi.screenrecorder.view.NamedSpinner
+                        android:id="@+id/audio_channel_count"
+                        android:name="@string/channels"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:entries="@array/audio_channels" />
+
+                    <com.lupindi.screenrecorder.view.NamedSpinner
+                        android:id="@+id/sample_rate"
+                        android:name="@string/sample_rate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp" />
+
+                    <com.lupindi.screenrecorder.view.NamedSpinner
+                        android:id="@+id/audio_bitrate"
+                        android:name="@string/bitrate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp" />
+
+                    <com.lupindi.screenrecorder.view.NamedSpinner
+                        android:id="@+id/aac_profile"
+                        android:name="@string/aac_profile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp" />
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
-    <com.lupindi.screenrecorder.view.WaveView
-        android:id="@+id/wave_view"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginBottom="100dp"
-        />
+        </ScrollView>
 
-    <com.lupindi.screenrecorder.view.CircleWaveButton
-        android:id="@+id/record_button"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="80dp"
-        android:layout_width="80dp"
-        android:layout_height="80dp" />
+        <com.lupindi.screenrecorder.view.WaveView
+            android:id="@+id/wave_view"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="120dp" />
 
-    <ToggleButton
-        android:id="@+id/with_audio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/record_button"
-        android:layout_alignParentEnd="true"
-        android:checked="true"
-        android:textOff="@string/without_audio"
-        android:textOn="@string/with_audio" />
+        <com.lupindi.screenrecorder.view.CircleWaveButton
+            android:id="@+id/record_button"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="40dp" />
+
+        <com.lupindi.screenrecorder.widget.SwitchButton
+            android:layout_above="@+id/record_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"/>
+        <ToggleButton
+            android:id="@+id/with_audio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/record_button"
+            android:layout_alignParentEnd="true"
+            android:checked="true"
+            android:textOff="@string/without_audio"
+            android:textOn="@string/with_audio" />
+    </RelativeLayout>
 
     <LinearLayout
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
+        android:id="@+id/navigation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
         <Button
-            android:text="录制"
-            android:layout_weight="1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="录制" />
+
         <Button
-            android:text="视频"
-            android:layout_weight="1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="视频" />
     </LinearLayout>
 </RelativeLayout>
