@@ -5,5 +5,9 @@
     <color name="colorAccent">#D81B60</color>
     <color name="circle_bule_bbd4e7">#007D28</color>
     <color name="textcolor">#FFFFFF</color>
-    <color name="running">#BAE3C3</color>
+    <color name="running">#FFFFFF</color>
+    <color name="colorStart">#00D197</color>
+    <color name="colorEnd">#ff51d367</color>
+    <color name="colorGray">#808080</color>
+
 </resources>

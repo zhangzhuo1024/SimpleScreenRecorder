@@ -21,7 +21,7 @@ import com.lupindi.screenrecorder.R;
 public class CircleWaveButton extends View {
 
     //这是默认颜色
-    private int paintColor= R.color.circle_bule_bbd4e7;
+    private int paintColor= R.color.colorEnd;
     //画圆的画笔
     private Paint paint = new Paint();
     //画字的画笔

@@ -1,48 +1,53 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container"
+    android:background="@drawable/background_color"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/background_color">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/action_bar"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_centerVertical="true"
-            android:background="@color/colorPrimary" />
+            android:src="@drawable/ic_perm_identity" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/app_name"
-            android:textSize="30sp" />
+            android:textColor="@color/textcolor"
+            android:textSize="22sp" />
 
         <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="8dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:background="@color/colorAccent" />
+            android:src="@drawable/ic_settings" />
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/navigation"
+        android:layout_above="@id/bottomBar"
         android:layout_below="@id/action_bar"
         android:orientation="vertical">
 
         <ScrollView
-
             android:layout_width="match_parent"
-            android:layout_height="200dp">
+            android:layout_height="200dp"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/media_format_chooser"
@@ -62,14 +67,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp" />
-
-                <com.lupindi.screenrecorder.view.NamedSpinner
-                    android:id="@+id/resolution"
-                    android:name="@string/resolution"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:entries="@array/video_resolutions" />
 
                 <com.lupindi.screenrecorder.view.NamedSpinner
                     android:id="@+id/video_bitrate"
@@ -103,14 +100,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp" />
-
-                <com.lupindi.screenrecorder.view.NamedSpinner
-                    android:id="@+id/orientation"
-                    android:name="@string/orientation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:entries="@array/orientations" />
 
                 <LinearLayout
                     android:id="@+id/audio_format_chooser"
@@ -164,12 +153,137 @@
             </LinearLayout>
         </ScrollView>
 
+        <LinearLayout
+            android:id="@+id/settings_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/card_background"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_margin="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="16dp"
+                    android:text="选择分辨率"
+                    android:textSize="16sp" />
+
+                <com.lupindi.screenrecorder.view.NamedSpinner
+                    android:id="@+id/resolution"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:entries="@array/video_resolutions" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@android:color/darker_gray" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_margin="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="16dp"
+                    android:text="选择横竖屏"
+                    android:textSize="16sp" />
+
+                <com.lupindi.screenrecorder.view.NamedSpinner
+                    android:id="@+id/orientation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:entries="@array/orientations" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@android:color/darker_gray" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="16dp"
+                    android:text="开启悬浮窗"
+                    android:textSize="16sp" />
+
+                <com.lupindi.screenrecorder.widget.SwitchButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@android:color/darker_gray" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="16dp"
+                    android:text="开启麦克风"
+                    android:textSize="16sp" />
+
+                <com.lupindi.screenrecorder.widget.SwitchButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    app:sb_checked="true" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
         <com.lupindi.screenrecorder.view.WaveView
             android:id="@+id/wave_view"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="120dp" />
+            android:layout_marginTop="60dp"
+            android:layout_below="@id/settings_layout" />
 
         <com.lupindi.screenrecorder.view.CircleWaveButton
             android:id="@+id/record_button"
@@ -179,11 +293,6 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="40dp" />
 
-        <com.lupindi.screenrecorder.widget.SwitchButton
-            android:layout_above="@+id/record_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"/>
         <ToggleButton
             android:id="@+id/with_audio"
             android:layout_width="wrap_content"
@@ -192,26 +301,21 @@
             android:layout_alignParentEnd="true"
             android:checked="true"
             android:textOff="@string/without_audio"
-            android:textOn="@string/with_audio" />
+            android:textOn="@string/with_audio"
+            android:visibility="invisible" />
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/navigation"
+    <com.roughike.bottombar.BottomBar
+        android:id="@+id/bottomBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        android:background="#ffffff"
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="录制" />
+        app:bb_activeTabAlpha="1"
+        app:bb_activeTabColor="@color/colorEnd"
+        app:bb_inActiveTabAlpha="0.5"
+        app:bb_inActiveTabColor="@color/colorGray"
+        app:bb_tabXmlResource="@xml/bottombar_tabs" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="视频" />
-    </LinearLayout>
 </RelativeLayout>

@@ -16,7 +16,7 @@ import android.view.View;
 public class WaveView extends View {
 
     //波纹颜色
-    private int waveColor = 0xff0099CC;
+    private int waveColor = 0xff36E87A;
     // 振幅
     private float swing = 0;
     private int height;

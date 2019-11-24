@@ -49,9 +49,12 @@ import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.jaeger.library.StatusBarUtil;
 import com.lupindi.screenrecorder.view.CircleWaveButton;
 import com.lupindi.screenrecorder.view.NamedSpinner;
 import com.lupindi.screenrecorder.view.WaveView;
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnTabSelectListener;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -67,7 +70,7 @@ import static android.os.Build.VERSION_CODES.M;
 import static com.lupindi.screenrecorder.ScreenRecorder.AUDIO_AAC;
 import static com.lupindi.screenrecorder.ScreenRecorder.VIDEO_AVC;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnTabSelectListener {
     private static final int REQUEST_MEDIA_PROJECTION = 1;
     private static final int REQUEST_PERMISSIONS = 2;
     // members below will be initialized in onCreate()
@@ -103,6 +106,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setStatusBar();
         mMediaProjectionManager = (MediaProjectionManager) getApplicationContext().getSystemService(MEDIA_PROJECTION_SERVICE);
         mNotifications = new Notifications(getApplicationContext());
         bindViews();
@@ -124,6 +128,10 @@ public class MainActivity extends Activity {
         mAudioToggle.setChecked(
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
                         .getBoolean(getResources().getResourceEntryName(mAudioToggle.getId()), true));
+    }
+
+    private void setStatusBar() {
+        StatusBarUtil.setTranslucent(this, 0);
     }
 
     @Override
@@ -346,7 +354,7 @@ public class MainActivity extends Activity {
         mAudioSampleRate = findViewById(R.id.sample_rate);
         mAudioProfile = findViewById(R.id.aac_profile);
         mAudioChannelCount = findViewById(R.id.audio_channel_count);
-
+        BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         mAudioToggle = findViewById(R.id.with_audio);
         mAudioToggle.setOnCheckedChangeListener((buttonView, isChecked) ->
                 findViewById(R.id.audio_format_chooser)
@@ -371,6 +379,22 @@ public class MainActivity extends Activity {
         mOrientation.setOnItemSelectedListener((view, position) -> {
             onOrientationChanged(position, view.getSelectedItem());
         });
+
+        bottomBar.setOnTabSelectListener(this);
+    }
+
+    @Override
+    public void onTabSelected(int tabId) {
+        switch (tabId) {
+            case R.id.tab_screen:
+
+                break;
+            case R.id.tab_movie:
+
+                break;
+            default:
+                break;
+        }
     }
 
     private void onButtonClick(View v) {
