@@ -2,12 +2,16 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <tabs>
         <tab
+            id="@+id/tab_movie"
+            icon="@drawable/ic_theaters"
+            title="视频" />
+        <tab
             id="@+id/tab_screen"
             icon="@drawable/ic_videocam"
             title="录屏" />
         <tab
-            id="@+id/tab_movie"
-            icon="@drawable/ic_theaters"
-            title="视频" />
+            id="@+id/tab_settings"
+            icon="@drawable/ic_settings"
+            title="设置" />
     </tabs>
 </PreferenceScreen>

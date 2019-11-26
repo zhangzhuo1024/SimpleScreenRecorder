@@ -45,18 +45,22 @@ import android.util.Log;
 import android.util.Range;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.jaeger.library.StatusBarUtil;
+import com.lupindi.screenrecorder.activity.SettingsActivity;
 import com.lupindi.screenrecorder.view.CircleWaveButton;
 import com.lupindi.screenrecorder.view.NamedSpinner;
 import com.lupindi.screenrecorder.view.WaveView;
+import com.lupindi.screenrecorder.widget.SwitchButton;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,7 +80,7 @@ public class MainActivity extends Activity implements OnTabSelectListener {
     // members below will be initialized in onCreate()
     private MediaProjectionManager mMediaProjectionManager;
     private CircleWaveButton mButton;
-    private ToggleButton mAudioToggle;
+    private SwitchButton mAudioToggle;
     private NamedSpinner mVieoResolution;
     private NamedSpinner mVideoFramerate;
     private NamedSpinner mIFrameInterval;
@@ -101,6 +105,10 @@ public class MainActivity extends Activity implements OnTabSelectListener {
     private ScreenRecorder mRecorder;
     private MediaProjection mMediaProjection;
     private VirtualDisplay mVirtualDisplay;
+    private View mSettingsButton;
+    private RelativeLayout mRecordLayout;
+    private RelativeLayout mViedoLayout;
+    private RelativeLayout mSettingsLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -354,6 +362,20 @@ public class MainActivity extends Activity implements OnTabSelectListener {
         mAudioSampleRate = findViewById(R.id.sample_rate);
         mAudioProfile = findViewById(R.id.aac_profile);
         mAudioChannelCount = findViewById(R.id.audio_channel_count);
+
+
+        mRecordLayout = findViewById(R.id.recod_layout);
+        mViedoLayout = findViewById(R.id.video_layout);
+        mSettingsLayout = findViewById(R.id.other_settings_layout);
+
+
+        mSettingsButton = findViewById(R.id.settings_button);
+        mSettingsButton.setOnClickListener(v -> {
+//            Intent intent = new Intent();
+//            intent.setClass(this, SettingsActivity.class);
+//            startActivity(intent);
+        });
+
         BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         mAudioToggle = findViewById(R.id.with_audio);
         mAudioToggle.setOnCheckedChangeListener((buttonView, isChecked) ->
@@ -379,7 +401,7 @@ public class MainActivity extends Activity implements OnTabSelectListener {
         mOrientation.setOnItemSelectedListener((view, position) -> {
             onOrientationChanged(position, view.getSelectedItem());
         });
-
+        bottomBar.setDefaultTab(R.id.tab_screen);
         bottomBar.setOnTabSelectListener(this);
     }
 
@@ -387,10 +409,19 @@ public class MainActivity extends Activity implements OnTabSelectListener {
     public void onTabSelected(int tabId) {
         switch (tabId) {
             case R.id.tab_screen:
-
+                mRecordLayout.setVisibility(View.VISIBLE);
+                mViedoLayout.setVisibility(View.INVISIBLE);
+                mSettingsLayout.setVisibility(View.INVISIBLE);
                 break;
             case R.id.tab_movie:
-
+                mRecordLayout.setVisibility(View.INVISIBLE);
+                mViedoLayout.setVisibility(View.VISIBLE);
+                mSettingsLayout.setVisibility(View.INVISIBLE);
+                break;
+            case R.id.tab_settings:
+                mRecordLayout.setVisibility(View.INVISIBLE);
+                mViedoLayout.setVisibility(View.INVISIBLE);
+                mSettingsLayout.setVisibility(View.VISIBLE);
                 break;
             default:
                 break;
