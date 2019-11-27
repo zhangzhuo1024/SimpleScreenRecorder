@@ -41,6 +41,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.Range;
 import android.view.View;
@@ -51,7 +53,11 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.jaeger.library.StatusBarUtil;
+import com.lupindi.screenrecorder.activity.PlayActivity;
 import com.lupindi.screenrecorder.activity.SettingsActivity;
+import com.lupindi.screenrecorder.adapter.VideoAdapter;
+import com.lupindi.screenrecorder.bean.VideoBean;
+import com.lupindi.screenrecorder.constant.IntentConstant;
 import com.lupindi.screenrecorder.view.CircleWaveButton;
 import com.lupindi.screenrecorder.view.NamedSpinner;
 import com.lupindi.screenrecorder.view.WaveView;
@@ -109,6 +115,8 @@ public class MainActivity extends Activity implements OnTabSelectListener {
     private RelativeLayout mRecordLayout;
     private RelativeLayout mViedoLayout;
     private RelativeLayout mSettingsLayout;
+    private static final int REQ_CODE = 200;
+    private VideoAdapter videoAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,6 +179,21 @@ public class MainActivity extends Activity implements OnTabSelectListener {
             mMediaProjection = mediaProjection;
             mMediaProjection.registerCallback(mProjectionCallback, new Handler());
             startCapturing(mediaProjection);
+        }
+
+        if (requestCode == REQ_CODE && resultCode == Activity.RESULT_OK) {
+            String action = data.getAction();
+            if (IntentConstant.ACTION_NEXT.equals(action)) {
+//                Toast.makeText(this,"ACTION_NEXT",Toast.LENGTH_SHORT).show();
+                int targetPosition = currentPosition + 1;
+                VideoBean videoBean = videoAdapter.getVideoBean(targetPosition);
+                goPlayActivity(targetPosition, videoBean);
+            } else if (IntentConstant.ACTION_PREV.equals(action)) {
+//                Toast.makeText(this,"ACTION_PREV",Toast.LENGTH_SHORT).show();
+                int targetPosition = currentPosition - 1;
+                VideoBean videoBean = videoAdapter.getVideoBean(targetPosition);
+                goPlayActivity(targetPosition, videoBean);
+            }
         }
     }
 
@@ -333,6 +356,7 @@ public class MainActivity extends Activity implements OnTabSelectListener {
             mMediaProjection.stop();
             mMediaProjection = null;
         }
+        videoAdapter.release();
     }
 
     private void requestMediaProjection() {
@@ -376,6 +400,29 @@ public class MainActivity extends Activity implements OnTabSelectListener {
 //            startActivity(intent);
         });
 
+
+
+        // RecyclerView 的使用：
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_rv);
+        //1 设置布局管理器
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //2 设置Adapter
+        videoAdapter = new VideoAdapter(this);
+        videoAdapter.init();
+        recyclerView.setAdapter(videoAdapter);
+
+        videoAdapter.setOnItemClickListener(new VideoAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position, VideoBean videoBean) {
+                goPlayActivity(position, videoBean);
+            }
+        });
+        AlertDialog.Builder builder;
+
+
+
+
+
         BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         mAudioToggle = findViewById(R.id.with_audio);
         mAudioToggle.setOnCheckedChangeListener((buttonView, isChecked) ->
@@ -403,6 +450,8 @@ public class MainActivity extends Activity implements OnTabSelectListener {
         });
         bottomBar.setDefaultTab(R.id.tab_screen);
         bottomBar.setOnTabSelectListener(this);
+
+
     }
 
     @Override
@@ -979,4 +1028,16 @@ public class MainActivity extends Activity implements OnTabSelectListener {
         }
     };
 
+
+    int currentPosition;
+
+    private void goPlayActivity(int position, VideoBean videoBean) {
+        currentPosition = position;
+        Intent intent = new Intent(this, PlayActivity.class);
+        intent.putExtra(IntentConstant.KEY_HAS_NEXT, currentPosition < videoAdapter.getItemCount() - 1);
+        intent.putExtra(IntentConstant.KEY_HAS_PREV, currentPosition > 0);
+        intent.putExtra("VideoBean", videoBean);
+//        startActivity(intent);
+        startActivityForResult(intent, REQ_CODE);
+    }
 }

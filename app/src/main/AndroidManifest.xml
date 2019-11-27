@@ -22,6 +22,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.SettingsActivity"></activity>
+        <activity
+            android:name=".activity.PlayActivity"
+            android:theme="@style/AppTheme.FullScreen" />
     </application>
-
 </manifest>
