@@ -41,6 +41,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -186,13 +187,13 @@ public class MainActivity extends Activity implements OnTabSelectListener {
             if (IntentConstant.ACTION_NEXT.equals(action)) {
 //                Toast.makeText(this,"ACTION_NEXT",Toast.LENGTH_SHORT).show();
                 int targetPosition = currentPosition + 1;
-                VideoBean videoBean = videoAdapter.getVideoBean(targetPosition);
-                goPlayActivity(targetPosition, videoBean);
+//                VideoBean videoBean = videoAdapter.getVideoBean(targetPosition);
+//                goPlayActivity(targetPosition, videoBean);
             } else if (IntentConstant.ACTION_PREV.equals(action)) {
 //                Toast.makeText(this,"ACTION_PREV",Toast.LENGTH_SHORT).show();
                 int targetPosition = currentPosition - 1;
-                VideoBean videoBean = videoAdapter.getVideoBean(targetPosition);
-                goPlayActivity(targetPosition, videoBean);
+//                VideoBean videoBean = videoAdapter.getVideoBean(targetPosition);
+//                goPlayActivity(targetPosition, videoBean);
             }
         }
     }
@@ -322,8 +323,9 @@ public class MainActivity extends Activity implements OnTabSelectListener {
     }
 
     private static File getSavingDir() {
+
         return new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES),
-                "Screenshots");
+                "LuPinDi");
     }
 
     @Override
@@ -356,7 +358,7 @@ public class MainActivity extends Activity implements OnTabSelectListener {
             mMediaProjection.stop();
             mMediaProjection = null;
         }
-        videoAdapter.release();
+//        videoAdapter.release();
     }
 
     private void requestMediaProjection() {
@@ -413,14 +415,11 @@ public class MainActivity extends Activity implements OnTabSelectListener {
 
         videoAdapter.setOnItemClickListener(new VideoAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View v, int position, VideoBean videoBean) {
-                goPlayActivity(position, videoBean);
+            public void onItemClick(String path) {
+                playVideo(path);
             }
         });
-        AlertDialog.Builder builder;
-
-
-
+        
 
 
         BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
@@ -1034,10 +1033,48 @@ public class MainActivity extends Activity implements OnTabSelectListener {
     private void goPlayActivity(int position, VideoBean videoBean) {
         currentPosition = position;
         Intent intent = new Intent(this, PlayActivity.class);
-        intent.putExtra(IntentConstant.KEY_HAS_NEXT, currentPosition < videoAdapter.getItemCount() - 1);
+//        intent.putExtra(IntentConstant.KEY_HAS_NEXT, currentPosition < videoAdapter.getItemCount() - 1);
         intent.putExtra(IntentConstant.KEY_HAS_PREV, currentPosition > 0);
         intent.putExtra("VideoBean", videoBean);
 //        startActivity(intent);
         startActivityForResult(intent, REQ_CODE);
     }
+
+
+    private void playVideo(String videoPath) {
+        //new File 的位置有问题，使用哪种播放器有待确认
+
+
+//                Intent intent = new Intent(Intent.ACTION_VIEW);
+//                String strend="";
+//                if(videoPath.toLowerCase().endsWith(".mp4")){
+//                   strend="mp4";
+//                }
+//                else if(videoPath.toLowerCase().endsWith(".3gp")){
+//                   strend="3gp";
+//                }
+//                else if(videoPath.toLowerCase().endsWith(".mov")){
+//                   strend="mov";
+//                }
+//                else if(videoPath.toLowerCase().endsWith(".avi")){
+//                   strend="avi";
+//                }
+//                intent.setDataAndType(Uri.parse(videoPath), "video/*");
+//                startActivity(intent);
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        //判断是否是AndroidN以及更高的版本
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Uri contentUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID +
+                    ".fileProvider", new File(videoPath));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setDataAndType(contentUri, "video/*");
+        } else {
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setDataAndType(Uri.fromFile(new File(videoPath)), "video/*");
+        }
+        startActivity(intent);
+    }
+
 }

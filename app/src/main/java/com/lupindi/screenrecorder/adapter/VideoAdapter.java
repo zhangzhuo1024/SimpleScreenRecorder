@@ -7,10 +7,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.Formatter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.lupindi.screenrecorder.bean.PictureBean;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -45,13 +49,13 @@ public class VideoAdapter extends RecyclerView.Adapter {
 
 
     public static interface OnItemClickListener {
-        void onItemClick(View v, int position, VideoBean videoBean);
+        void onItemClick(String path);
     }
 
     //    List<VideoBean> videoBeans = new ArrayList<>();
     Cursor videoCursor;
     Context context;
-
+    List<PictureBean> listPictures = new ArrayList<>();
 
     public VideoAdapter(Context context) {
         this.context = context;
@@ -60,8 +64,8 @@ public class VideoAdapter extends RecyclerView.Adapter {
     // 返回RecyclerView的条目数量 ,相当于BaseAdapter的getCount方法
     @Override
     public int getItemCount() {
-
-        return videoCursor == null ? 0 : videoCursor.getCount();
+        return listPictures == null ? 0 : listPictures.size();
+//        return videoCursor == null ? 0 : videoCursor.getCount();
     }
 
     Map<Integer, String> thumbsMap = new HashMap<>();
@@ -69,33 +73,6 @@ public class VideoAdapter extends RecyclerView.Adapter {
     // 相当于BaseAdapter的getView方法的前半部分，用来创建出一个 ViewHolder
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//        View itemView = View.inflate(parent.getContext(), R.layout.item, null);
-
-
-        // 把 R.layout.item 布局资源把变成一个 View，然后填充的 parent 中
-//        View.inflate(parent.getContext(), R.layout.item, parent);
-//        等价的
-//        layoutInflater.inflate(R.layout.item, parent);
-//        等价的
-//        layoutInflater.inflate(R.layout.item, parent,true);
-
-// // 把 R.layout.item 布局资源把变成一个 View ，这个View是孤立的（没有parent），后续会自行把填充好的View添加到某个parent中
-//        View.inflate(parent.getContext(), R.layout.item, null);
-//        等价的
-//        layoutInflater.inflate(R.layout.item, null);
-//        等价的
-//        layoutInflater.inflate(R.layout.item, null,true/false);
-
-        // 问题：在R.layout.item 最外层控件中写了一些 layout_ 开头的属性就丢失了
-        // 原因是 解析布局xml时，会把 控件变成View对象，会把 layout_ 开头的属性 变成LayoutParams，但LayoutParams有很多种
-        // 如果不确定父控件是什么，就不知道转成什么类型的 LayoutParams ，所以会把这些 layout_ 开头的属性  丢弃掉
-
-        // 解决： 使用layoutInflater.inflate 三个参数的方法，给定parent，但第三个参数传递false，表示不添加到容器中，
-        // 但需要 把 layout_ 开头的属性 变成 parent 对应的类型的 LayoutParams
-
-        // 第三个参数 一般是false，比如在ListView的adapter RecyclerView的adapter 、Fragment（onCreateView）
-        // 如果传true的话我们直接使用2个参数的方法了
-
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View itemView = layoutInflater.inflate(R.layout.item, parent, false);
 
@@ -114,30 +91,21 @@ public class VideoAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final VideoViewHolder videoViewHolder = (VideoViewHolder) holder;
-
         // 移动cursor到指定行
-        videoCursor.moveToPosition(position);
-        VideoBean videoBean = videoViewHolder.videoBean;
-        videoBean.reUse(videoCursor);
+//        videoCursor.moveToPosition(position);
+//        VideoBean videoBean = videoViewHolder.videoBean;
+//        videoBean.reUse(videoCursor);
+//        videoViewHolder.bind();
 
-        videoViewHolder.bind();
-
-//      这样做会有多个点击监听对象，不好！
-//        videoViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(onItemClickListener!=null){
-//
-//                    onItemClickListener.onItemClick(v,position,videoViewHolder.videoBean);
-//                }
-//            }
-//        });
+        videoViewHolder.iv.setImageBitmap(listPictures.get(position).getBitmap());
+        videoViewHolder.titleTv.setText(listPictures.get(position).getName());
     }
 
     // 对资源进行初始化
     public void init() {
         // 相当于开启了子线程，所以不会阻塞，代码很快就执行完了
-        new VideoTask().execute(context.getContentResolver());
+//        new VideoTask().execute(context.getContentResolver());
+        new VideoMessageTask().execute();
     }
 
     // 对资源进行释放
@@ -202,11 +170,48 @@ public class VideoAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public VideoBean getVideoBean(int position) {
-        videoCursor.moveToPosition(position);
-        VideoBean  videoBean = new VideoBean();
-        videoBean.reUse(videoCursor);
-        return videoBean;
+
+
+    private class VideoMessageTask extends AsyncTask {
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+
+
+            String video_path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES) + "/LuPinDi";
+            Log.i("@@@", video_path);
+            File file = new File(video_path);
+            //判断文件夹是否存在，如果不存在就创建一个
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            File[] files = file.listFiles();
+            for (int i = 0; i < files.length; i++) {
+                PictureBean picture = new PictureBean();
+                picture.setBitmap(getVideoThumbnail(files[i].getPath(), 200, 200, MediaStore.Images.Thumbnails.MICRO_KIND));
+                picture.setPath(files[i].getPath());
+                picture.setName(files[i].getName());
+                listPictures.add(picture);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            notifyDataSetChanged();
+        }
+    }
+
+    //获取视频的缩略图
+    private Bitmap getVideoThumbnail(String videoPath, int width, int height, int kind) {
+        Bitmap bitmap = null;
+        // 获取视频的缩略图
+        bitmap = ThumbnailUtils.createVideoThumbnail(videoPath, kind);
+//            System.out.println("w"+bitmap.getWidth());
+//            System.out.println("h"+bitmap.getHeight());
+        bitmap = ThumbnailUtils.extractThumbnail(bitmap, width, height,
+                ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
+        return bitmap;
     }
 
     private class VideoTask extends AsyncTask<ContentResolver, Void, Cursor> {
@@ -243,7 +248,7 @@ public class VideoAdapter extends RecyclerView.Adapter {
                 // AdapterPosition 获取adapter中的角标
                 // LayoutPosition  获得被显示的角标
                 int position = videoViewHolder.getAdapterPosition();
-                onItemClickListener.onItemClick(v, position, videoViewHolder.videoBean);
+                onItemClickListener.onItemClick(listPictures.get(position).getPath());
             }
         }
     };
