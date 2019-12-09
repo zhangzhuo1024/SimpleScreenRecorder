@@ -212,8 +212,7 @@ public class MainActivity extends Activity implements OnTabSelectListener {
             return;
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US);
-        final File file = new File(dir, "Screenshots-" + format.format(new Date())
-                + "-" + video.width + "x" + video.height + ".mp4");
+        final File file = new File(dir, "Recoder-" + format.format(new Date()) + ".mp4");
         Log.d("@@", "Create recorder with :" + video + " \n " + audio + "\n " + file);
         mRecorder = newRecorder(mediaProjection, video, audio, file);
         if (hasPermissions()) {
@@ -416,7 +415,18 @@ public class MainActivity extends Activity implements OnTabSelectListener {
         videoAdapter.setOnItemClickListener(new VideoAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(String path) {
-                playVideo(path);
+                File file = new File(path);
+                Log.i("@@@", "setOnItemClickListener " + path);
+
+                StrictMode.VmPolicy vmPolicy = StrictMode.getVmPolicy();
+                try {
+                    // disable detecting FileUriExposure on public file
+                    StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().build());
+                    viewResult(file);
+                } finally {
+                    StrictMode.setVmPolicy(vmPolicy);
+                }
+//                playVideo(path);
             }
         });
         
@@ -991,20 +1001,24 @@ public class MainActivity extends Activity implements OnTabSelectListener {
     }
 
     private void stopRecordingAndOpenFile(Context context) {
+        String savedPath = mRecorder.getSavedPath();
+        Log.i("@@@", "stopRecordingAndOpenFile " + savedPath);
         File file = new File(mRecorder.getSavedPath());
         stopRecorder();
         Toast.makeText(context, getString(R.string.recorder_stopped_saved_file) + " " + file, Toast.LENGTH_LONG).show();
-        StrictMode.VmPolicy vmPolicy = StrictMode.getVmPolicy();
-        try {
-            // disable detecting FileUriExposure on public file
-            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().build());
-            viewResult(file);
-        } finally {
-            StrictMode.setVmPolicy(vmPolicy);
-        }
+        videoAdapter.updateItem();
+//        StrictMode.VmPolicy vmPolicy = StrictMode.getVmPolicy();
+//        try {
+//            // disable detecting FileUriExposure on public file
+//            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().build());
+//            viewResult(file);
+//        } finally {
+//            StrictMode.setVmPolicy(vmPolicy);
+//        }
     }
 
     private void viewResult(File file) {
+        Log.i("@@@", file.toString());
         Intent view = new Intent(Intent.ACTION_VIEW);
         view.addCategory(Intent.CATEGORY_DEFAULT);
         view.setDataAndType(Uri.fromFile(file), VIDEO_AVC);
@@ -1033,10 +1047,10 @@ public class MainActivity extends Activity implements OnTabSelectListener {
     private void goPlayActivity(int position, VideoBean videoBean) {
         currentPosition = position;
         Intent intent = new Intent(this, PlayActivity.class);
-//        intent.putExtra(IntentConstant.KEY_HAS_NEXT, currentPosition < videoAdapter.getItemCount() - 1);
+        intent.putExtra(IntentConstant.KEY_HAS_NEXT, currentPosition < videoAdapter.getItemCount() - 1);
         intent.putExtra(IntentConstant.KEY_HAS_PREV, currentPosition > 0);
         intent.putExtra("VideoBean", videoBean);
-//        startActivity(intent);
+        startActivity(intent);
         startActivityForResult(intent, REQ_CODE);
     }
 
@@ -1064,6 +1078,7 @@ public class MainActivity extends Activity implements OnTabSelectListener {
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
         //判断是否是AndroidN以及更高的版本
+        Log.i("@@@", videoPath);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Uri contentUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID +
                     ".fileProvider", new File(videoPath));
