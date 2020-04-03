@@ -31,7 +31,7 @@
             android:gravity="center"
             android:singleLine="true"
             android:text="七个小矮人与白雪公主"
-            android:textSize="20sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/item_size_tv"

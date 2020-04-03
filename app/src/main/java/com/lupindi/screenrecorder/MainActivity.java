@@ -475,6 +475,7 @@ public class MainActivity extends Activity implements OnTabSelectListener {
                 mRecordLayout.setVisibility(View.INVISIBLE);
                 mViedoLayout.setVisibility(View.VISIBLE);
                 mSettingsLayout.setVisibility(View.INVISIBLE);
+                videoAdapter.updateData();
                 break;
             case R.id.tab_settings:
                 mRecordLayout.setVisibility(View.INVISIBLE);
@@ -507,7 +508,7 @@ public class MainActivity extends Activity implements OnTabSelectListener {
         mRecorder.start();
         mButton.setText(getString(R.string.stop_recorder));
         registerReceiver(mStopActionReceiver, new IntentFilter(ACTION_STOP));
-        moveTaskToBack(true);
+//        moveTaskToBack(true);
     }
 
     private void stopRecorder() {
@@ -893,8 +894,7 @@ public class MainActivity extends Activity implements OnTabSelectListener {
         int length_toast = Locale.getDefault().getCountry().equals("BR") ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT;
         // In Brazilian Portuguese this may take longer to read
 
-        Toast toast = Toast.makeText(this,
-                (args.length == 0) ? message : String.format(Locale.US, message, args),
+        Toast toast = Toast.makeText(this, message,
                 length_toast);
         if (Looper.myLooper() != Looper.getMainLooper()) {
             runOnUiThread(toast::show);
@@ -1006,7 +1006,7 @@ public class MainActivity extends Activity implements OnTabSelectListener {
         File file = new File(mRecorder.getSavedPath());
         stopRecorder();
         Toast.makeText(context, getString(R.string.recorder_stopped_saved_file) + " " + file, Toast.LENGTH_LONG).show();
-        videoAdapter.updateItem();
+//        videoAdapter.updateItem();
 //        StrictMode.VmPolicy vmPolicy = StrictMode.getVmPolicy();
 //        try {
 //            // disable detecting FileUriExposure on public file

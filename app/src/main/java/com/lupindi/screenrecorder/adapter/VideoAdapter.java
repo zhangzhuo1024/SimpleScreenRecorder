@@ -48,6 +48,11 @@ import com.lupindi.screenrecorder.utils.MyFormatter;
 public class VideoAdapter extends RecyclerView.Adapter {
 
 
+    public void updateData() {
+        getPictureList();
+        notifyDataSetChanged();
+    }
+
     public static interface OnItemClickListener {
         void onItemClick(String path);
     }
@@ -177,28 +182,31 @@ public class VideoAdapter extends RecyclerView.Adapter {
         @Override
         protected Object doInBackground(Object[] objects) {
 
-
-            String video_path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES) + "/LuPinDi";
-            Log.i("@@@", video_path);
-            File file = new File(video_path);
-            //判断文件夹是否存在，如果不存在就创建一个
-            if (!file.exists()) {
-                file.mkdirs();
-            }
-            File[] files = file.listFiles();
-            for (int i = 0; i < files.length; i++) {
-                PictureBean picture = new PictureBean();
-                picture.setBitmap(getVideoThumbnail(files[i].getPath(), 200, 200, MediaStore.Images.Thumbnails.MICRO_KIND));
-                picture.setPath(files[i].getPath());
-                picture.setName(files[i].getName());
-                listPictures.add(picture);
-            }
+            getPictureList();
             return null;
         }
 
         @Override
         protected void onPostExecute(Object o) {
             notifyDataSetChanged();
+        }
+    }
+
+    private void getPictureList() {
+        listPictures.clear();
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES), "LuPinDi");
+        //判断文件夹是否存在，如果不存在就创建一个
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        File[] files = file.listFiles();
+        for (int i = 0; i < files.length; i++) {
+            long length = files[i].length();
+            PictureBean picture = new PictureBean();
+            picture.setBitmap(getVideoThumbnail(files[i].getPath(), 200, 200, MediaStore.Images.Thumbnails.MICRO_KIND));
+            picture.setPath(files[i].getPath());
+            picture.setName(files[i].getName());
+            listPictures.add(picture);
         }
     }
 
