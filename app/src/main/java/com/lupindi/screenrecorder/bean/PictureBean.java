@@ -6,6 +6,8 @@ public class PictureBean {
     private String name;
     private Bitmap bitmap;
     private String path;
+    private String size;
+    private String duration;
 
     public void setBitmap(Bitmap videoThumbnail) {
         this.bitmap = videoThumbnail;
@@ -29,5 +31,21 @@ public class PictureBean {
 
     public String getPath() {
         return path;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 }

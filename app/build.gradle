@@ -11,6 +11,29 @@ android {
         versionName '2.4.2'
     }
 
+    //签名
+    signingConfigs {
+        debug {
+
+        }
+        release {// 自己的签名文件
+            storeFile file("D:/develop/AndroidStudioProjects/github/keystone/SimpleScreenRecorder.jks")
+            storePassword "ss110110"
+            keyAlias "key0"
+            keyPassword "key110110"
+        }
+    }
+    buildTypes {
+        release {
+            //混淆
+            minifyEnabled true  //false表示不混淆
+            // 移除无用的resource文件
+//            shrinkResources true
+            //前一部分代表系统默认的android程序的混淆文件，该文件已经包含了基本的混淆声明，后一个文件是自己的定义混淆文件
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

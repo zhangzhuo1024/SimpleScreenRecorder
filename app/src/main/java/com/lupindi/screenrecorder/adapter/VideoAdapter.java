@@ -7,9 +7,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.Formatter;
@@ -28,6 +30,7 @@ import com.lupindi.screenrecorder.bean.PictureBean;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -102,8 +105,11 @@ public class VideoAdapter extends RecyclerView.Adapter {
 //        videoBean.reUse(videoCursor);
 //        videoViewHolder.bind();
 
+        Log.e("111111", "listPictures.get(position).getBitmap() = " + listPictures.get(position).getBitmap());
+
         videoViewHolder.iv.setImageBitmap(listPictures.get(position).getBitmap());
         videoViewHolder.titleTv.setText(listPictures.get(position).getName());
+        videoViewHolder.sizeTv.setText(listPictures.get(position).getSize());
     }
 
     // 对资源进行初始化
@@ -200,22 +206,58 @@ public class VideoAdapter extends RecyclerView.Adapter {
             if (!oldFile.exists()) {
                 oldFile.mkdirs();
             }
+
             File[] files = oldFile.listFiles();
+            if (files == null) {
+                return;
+            }
+            MediaPlayer mediaPlayer = new MediaPlayer();
             for (int i = 0; i < files.length; i++) {
                 long length = files[i].length();
+                Log.e("111111", "files[i].getPath() = " + files[i].getPath());
+
+//                try {
+//                    mediaPlayer.setDataSource(files[i].getPath());
+//                    mediaPlayer.prepare();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+                long time = mediaPlayer.getDuration();//获得了视频的时长（以毫秒为单位）
                 PictureBean picture = new PictureBean();
                 picture.setBitmap(getVideoThumbnail(files[i].getPath(), 200, 200, MediaStore.Images.Thumbnails.MINI_KIND));
                 picture.setPath(files[i].getPath());
                 picture.setName(files[i].getName());
+                picture.setSize(Formatter.formatFileSize(context, length));
+//                picture.setDuration(MyFormatter.formatDuration(time));
                 listPictures.add(picture);
             }
+//            mediaPlayer.release();
         } else {
-            long length = file.length();
-            PictureBean picture = new PictureBean();
-            picture.setBitmap(getVideoThumbnail(file.getPath(), 200, 200, MediaStore.Images.Thumbnails.MINI_KIND));
-            picture.setPath(file.getPath());
-            picture.setName(file.getName());
-            listPictures.add(picture);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    long length = file.length();
+                    PictureBean picture = new PictureBean();
+//                    MediaPlayer mediaPlayer = new MediaPlayer();
+//                    try {
+//                        mediaPlayer.setDataSource(file.getPath());
+//                        mediaPlayer.prepare();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                    long time = mediaPlayer.getDuration();//获得了视频的时长（以毫秒为单位）
+//                    mediaPlayer.release();
+                    Log.e("111111", "file.getPath() = " + file.getPath());
+                    Log.e("111111", "picture.setBitmap( = " + getVideoThumbnail(file.getPath(), 200, 200, MediaStore.Images.Thumbnails.MINI_KIND));
+                    picture.setBitmap(getVideoThumbnail(file.getPath(), 200, 200, MediaStore.Images.Thumbnails.MINI_KIND));
+                    picture.setPath(file.getPath());
+                    picture.setName(file.getName());
+                    picture.setSize(Formatter.formatFileSize(context, length));
+//                    picture.setDuration(MyFormatter.formatDuration(time));
+                    listPictures.add(picture);
+                }
+            },2000);
+
         }
     }
 
@@ -223,11 +265,14 @@ public class VideoAdapter extends RecyclerView.Adapter {
     private Bitmap getVideoThumbnail(String videoPath, int width, int height, int kind) {
         Bitmap bitmap = null;
         // 获取视频的缩略图
+        Log.e("111111", " start  videoPath= " + videoPath);
         bitmap = ThumbnailUtils.createVideoThumbnail(videoPath, kind);
+        Log.e("111111", " end  bitmap = " + bitmap);
 //            System.out.println("w"+bitmap.getWidth());
 //            System.out.println("h"+bitmap.getHeight());
         bitmap = ThumbnailUtils.extractThumbnail(bitmap, width, height,
                 ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
+        Log.e("111111", " end  bitmap2 = " + bitmap);
         return bitmap;
     }
 

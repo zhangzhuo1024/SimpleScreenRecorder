@@ -112,7 +112,7 @@ public class MainActivity extends Activity implements OnTabSelectListener {
     private ScreenRecorder mRecorder;
     private MediaProjection mMediaProjection;
     private VirtualDisplay mVirtualDisplay;
-    private View mSettingsButton;
+//    private View mSettingsButton;
     private RelativeLayout mRecordLayout;
     private RelativeLayout mViedoLayout;
     private RelativeLayout mSettingsLayout;
@@ -367,8 +367,8 @@ public class MainActivity extends Activity implements OnTabSelectListener {
 
     private void bindViews() {
 
-        WaveView viewById = findViewById(R.id.wave_view);
-        viewById.start();
+//        WaveView waveView = findViewById(R.id.wave_view);
+//        waveView.start();
 
         mButton = findViewById(R.id.record_button);
         mButton.start();
@@ -394,12 +394,12 @@ public class MainActivity extends Activity implements OnTabSelectListener {
         mSettingsLayout = findViewById(R.id.other_settings_layout);
 
 
-        mSettingsButton = findViewById(R.id.settings_button);
-        mSettingsButton.setOnClickListener(v -> {
+//        mSettingsButton = findViewById(R.id.settings_button);
+//        mSettingsButton.setOnClickListener(v -> {
 //            Intent intent = new Intent();
 //            intent.setClass(this, SettingsActivity.class);
 //            startActivity(intent);
-        });
+//        });
 
 
 
@@ -477,17 +477,18 @@ public class MainActivity extends Activity implements OnTabSelectListener {
                 mSettingsLayout.setVisibility(View.INVISIBLE);
 
                 break;
-            case R.id.tab_settings:
-                mRecordLayout.setVisibility(View.INVISIBLE);
-                mViedoLayout.setVisibility(View.INVISIBLE);
-                mSettingsLayout.setVisibility(View.VISIBLE);
-                break;
+//            case R.id.tab_settings:
+//                mRecordLayout.setVisibility(View.INVISIBLE);
+//                mViedoLayout.setVisibility(View.INVISIBLE);
+//                mSettingsLayout.setVisibility(View.VISIBLE);
+//                break;
             default:
                 break;
         }
     }
 
     private void onButtonClick(View v) {
+        Log.e("111111", "mRecorder " + mRecorder);
         if (mRecorder != null) {
             stopRecordingAndOpenFile(v.getContext());
         } else if (hasPermissions()) {
