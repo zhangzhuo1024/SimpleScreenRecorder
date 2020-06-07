@@ -48,8 +48,8 @@ import com.lupindi.screenrecorder.utils.MyFormatter;
 public class VideoAdapter extends RecyclerView.Adapter {
 
 
-    public void updateData() {
-        getPictureList();
+    public void updateData(File file) {
+        getPictureList(file);
         notifyDataSetChanged();
     }
 
@@ -182,7 +182,7 @@ public class VideoAdapter extends RecyclerView.Adapter {
         @Override
         protected Object doInBackground(Object[] objects) {
 
-            getPictureList();
+            getPictureList(null);
             return null;
         }
 
@@ -192,20 +192,29 @@ public class VideoAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private void getPictureList() {
-        listPictures.clear();
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES), "LuPinDi");
-        //判断文件夹是否存在，如果不存在就创建一个
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-        File[] files = file.listFiles();
-        for (int i = 0; i < files.length; i++) {
-            long length = files[i].length();
+    private void getPictureList(File file) {
+        if (file == null) {
+            listPictures.clear();
+            File oldFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES), "LuPinDi");
+            //判断文件夹是否存在，如果不存在就创建一个
+            if (!oldFile.exists()) {
+                oldFile.mkdirs();
+            }
+            File[] files = oldFile.listFiles();
+            for (int i = 0; i < files.length; i++) {
+                long length = files[i].length();
+                PictureBean picture = new PictureBean();
+                picture.setBitmap(getVideoThumbnail(files[i].getPath(), 200, 200, MediaStore.Images.Thumbnails.MINI_KIND));
+                picture.setPath(files[i].getPath());
+                picture.setName(files[i].getName());
+                listPictures.add(picture);
+            }
+        } else {
+            long length = file.length();
             PictureBean picture = new PictureBean();
-            picture.setBitmap(getVideoThumbnail(files[i].getPath(), 200, 200, MediaStore.Images.Thumbnails.MICRO_KIND));
-            picture.setPath(files[i].getPath());
-            picture.setName(files[i].getName());
+            picture.setBitmap(getVideoThumbnail(file.getPath(), 200, 200, MediaStore.Images.Thumbnails.MINI_KIND));
+            picture.setPath(file.getPath());
+            picture.setName(file.getName());
             listPictures.add(picture);
         }
     }

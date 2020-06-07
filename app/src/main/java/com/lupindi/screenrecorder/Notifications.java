@@ -62,6 +62,12 @@ class Notifications extends ContextWrapper {
         getNotificationManager().notify(id, notification);
         mLastFiredTime = SystemClock.elapsedRealtime();
     }
+    public void updateContentText() {
+        Notification notification = getBuilder()
+                .setContentTitle(getString(R.string.gravando))
+                .build();
+        getNotificationManager().notify(id, notification);
+    }
 
     private Notification.Builder getBuilder() {
         if (mBuilder == null) {
@@ -95,6 +101,8 @@ class Notifications extends ContextWrapper {
             Intent intent = new Intent(ACTION_STOP).setPackage(getPackageName());
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1,
                     intent, PendingIntent.FLAG_ONE_SHOT);
+
+
             mStopAction = new Notification.Action(android.R.drawable.ic_media_pause, getString(R.string.stop), pendingIntent);
         }
         return mStopAction;

@@ -475,7 +475,7 @@ public class MainActivity extends Activity implements OnTabSelectListener {
                 mRecordLayout.setVisibility(View.INVISIBLE);
                 mViedoLayout.setVisibility(View.VISIBLE);
                 mSettingsLayout.setVisibility(View.INVISIBLE);
-                videoAdapter.updateData();
+
                 break;
             case R.id.tab_settings:
                 mRecordLayout.setVisibility(View.INVISIBLE);
@@ -508,6 +508,8 @@ public class MainActivity extends Activity implements OnTabSelectListener {
         mRecorder.start();
         mButton.setText(getString(R.string.stop_recorder));
         registerReceiver(mStopActionReceiver, new IntentFilter(ACTION_STOP));
+        registerReceiver(mLanguageChangeReceiver, new IntentFilter(Intent.ACTION_LOCALE_CHANGED));
+
 //        moveTaskToBack(true);
     }
 
@@ -520,6 +522,7 @@ public class MainActivity extends Activity implements OnTabSelectListener {
         mButton.setText(getString(R.string.restart_recorder));
         try {
             unregisterReceiver(mStopActionReceiver);
+            unregisterReceiver(mLanguageChangeReceiver);
         } catch (Exception e) {
             //ignored
         }
@@ -1006,7 +1009,7 @@ public class MainActivity extends Activity implements OnTabSelectListener {
         File file = new File(mRecorder.getSavedPath());
         stopRecorder();
         Toast.makeText(context, getString(R.string.recorder_stopped_saved_file) + " " + file, Toast.LENGTH_LONG).show();
-//        videoAdapter.updateItem();
+        videoAdapter.updateData(file);
 //        StrictMode.VmPolicy vmPolicy = StrictMode.getVmPolicy();
 //        try {
 //            // disable detecting FileUriExposure on public file
@@ -1037,6 +1040,17 @@ public class MainActivity extends Activity implements OnTabSelectListener {
         public void onReceive(Context context, Intent intent) {
             if (ACTION_STOP.equals(intent.getAction())) {
                 stopRecordingAndOpenFile(context);
+            }
+        }
+    };
+
+    private BroadcastReceiver mLanguageChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if(intent.getAction().equals(Intent.ACTION_LOCALE_CHANGED)) {
+                Log.e("mLanguageChangeReceiver","Language change");
+                mNotifications.updateContentText();
             }
         }
     };

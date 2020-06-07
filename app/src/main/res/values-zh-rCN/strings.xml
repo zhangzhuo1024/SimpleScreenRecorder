@@ -29,8 +29,8 @@
     <string name="codec_unsupported_bitrate">codec \'%s\' unsupported bitrate %d</string>
     <string name="codec_unsupported_with_framerate">codec \'%s\' unsupported framerate %d</string>
     <string name="recorder_stopped_saved_file">Recorder stopped!  Saved file</string>
-    <string name="length_video">Length:</string>
-    <string name="gravando">Recording...</string>
+    <string name="length_video">视频长度:</string>
+    <string name="gravando">录制中</string>
     <string name="stop">Stop</string>
     <string name="create_screenRecorder_failure">Create ScreenRecorder failure</string>
 
